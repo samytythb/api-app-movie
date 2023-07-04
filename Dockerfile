@@ -1,15 +1,13 @@
-FROM ubuntu:latest AS build
+FROM maven:3.8.3-openjdk-17 AS build
+WORKDIR /app
+COPY . /app/
+RUN mvn clean package
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
-
-RUN ./gradlew bootJar --no-daemon
-
-FROM openjdk:17-jdk-slim
-
+#
+# Package stage
+#
+FROM openjdk:17-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
-
-COPY --from=build /build/libs/demo-1.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
