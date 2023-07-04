@@ -11,17 +11,20 @@ import java.util.List;
 import java.util.Optional;
 //
 @RestController
-@RequestMapping(value = "api/v1/movies")
+@RequestMapping("/api/v1/movies")
 @CrossOrigin
 public class MovieController {
+
     @Autowired
-    private MovieService movieService;
-    @GetMapping("/")
-    public ResponseEntity<List<Movie>> getAllMovies(){
-        return new ResponseEntity<List<Movie>>(movieService.allMovies(), HttpStatus.OK);
+    private MovieService service;
+
+    @GetMapping
+    public ResponseEntity<List<Movie>> getMovies() {
+        return new ResponseEntity<List<Movie>>(service.findAllMovies(), HttpStatus.OK);
     }
+
     @GetMapping("/{imdbId}")
     public ResponseEntity<Optional<Movie>> getSingleMovie(@PathVariable String imdbId){
-        return  new ResponseEntity<Optional<Movie>>(movieService.singleMovie(imdbId),HttpStatus.OK);
+        return new ResponseEntity<Optional<Movie>>(service.findMovieByImdbId(imdbId), HttpStatus.OK);
     }
 }

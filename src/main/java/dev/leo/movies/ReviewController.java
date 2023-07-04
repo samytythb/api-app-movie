@@ -7,16 +7,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+
 @RestController
-@RequestMapping("api/v1/reviews")
+@RequestMapping("/api/v1/reviews")
 @CrossOrigin
 public class ReviewController {
     @Autowired
-    private ReviewService reviewService;
+    private ReviewService service;
 
     @PostMapping()
-    public ResponseEntity<Review> createReview(@RequestBody Map<String, String> payload){
-        return new ResponseEntity<Review>(reviewService.createReview(payload.get("reviewBody"),payload.get("imdbId")), HttpStatus.OK);
-    }
+    public ResponseEntity<Review> createReview(@RequestBody Map<String, String> payload) {
 
+        return new ResponseEntity<Review>(service.createReview(payload.get("reviewBody"), payload.get("imdbId")), HttpStatus.OK);
+    }
 }
